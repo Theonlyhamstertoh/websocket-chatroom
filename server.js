@@ -2,7 +2,7 @@ const UWS = require("uWebSockets.js");
 const randomColor = require("randomcolor");
 var express = require("express");
 const { v4: uuidv4 } = require("uuid");
-const PORT = process.env.PORT || 9001;
+const PORT = process.env.PORT || "0.0.0.0";
 const decoder = new TextDecoder();
 
 const SOCKETS = [];
@@ -123,10 +123,12 @@ const app = UWS.App({
   .listen(PORT, (listenSocket) => {
     if (listenSocket) {
       console.log("Listening to:" + PORT);
+      console.log("Please ocnnect somehow");
     } else {
       console.log("Unable to listen to port 9001");
     }
-  });
+  })
+  .addServerName("weibo");
 
 function getClient(ws) {
   return SOCKETS.find((socket) => socket.id === ws.id);
