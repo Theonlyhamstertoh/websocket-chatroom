@@ -98,9 +98,9 @@ const app = UWS.App({
   .get("/home", (res, req) => {
     res.end("Welcome Home");
   })
-  .listen(port, (listenSocket) => {
+  .listen(process.env.PORT || 9001, (listenSocket) => {
     if (listenSocket) {
-      console.log("Listening to port 9001");
+      console.log("Listening to port");
     } else {
       console.log("Unable to listen to port 9001");
     }
