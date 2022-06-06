@@ -26,8 +26,7 @@ const app = UWS.App({
   // passphrase: "1234",
 })
   .ws("/*", {
-    sendPingsAutomatically: true,
-    // idleTimeout: 12,
+    idleTimeout: 12,
     maxBackpressure: 1024,
     maxPayloadLength: 512,
     compression: UWS.DEDICATED_COMPRESSOR_3KB,
@@ -108,6 +107,16 @@ const app = UWS.App({
     },
     close: (ws, code, message) => {
       console.log("DISCONNECTED");
+
+      const clientData = {
+        type: TYPES.CLIENT_DISCONNECTED,
+        body: {
+          username: ws.username,
+          color: ws.color,
+        },
+      };
+      app.publish(TYPES.CLIENT_DISCONNECTED, JSON.stringify(clientData));
+
       removeClient(ws);
     },
   })
@@ -120,7 +129,7 @@ const app = UWS.App({
   .get("/home", (res, req) => {
     // res.send();
   })
-  .listen("0.0.0.0", process.env.PORT || 9001, (listenSocket) => {
+  .listen("0.0.0.0", PORT, (listenSocket) => {
     if (listenSocket) {
       console.log("Listening to:" + PORT);
       console.log("Please ocnnect somehow");
