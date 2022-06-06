@@ -24,6 +24,7 @@ class uWebSocket {
   constructor() {
     this.ws = "";
     this.serverUrl = "wss://weibo-websockets.herokuapp.com/";
+    // this.serverUrl = "ws://localhost:9001";
   }
 
   connect() {
@@ -63,7 +64,7 @@ function messageTypeHandler(message) {
       addConnectionMessage("on", message.body.username);
       break;
     case TYPES.CLIENT_DISCONNECTED:
-      addConnectionMessage("off", message.username);
+      addConnectionMessage("off", message.body.username);
       break;
     case TYPES.GET_ALL_MESSAGES:
       console.log("NOT WORKING?", message.body);
