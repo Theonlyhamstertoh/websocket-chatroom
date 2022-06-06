@@ -21,8 +21,8 @@ const TYPES = Object.freeze({
 });
 
 const app = UWS.App({
-  key_file_name: "...",
-  cert_file_name: "...",
+  // key_file_name: "...",
+  // cert_file_name: "...",
   // passphrase: "1234",
 })
   .ws("/*", {
