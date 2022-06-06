@@ -120,7 +120,7 @@ const app = UWS.App({
   .get("/home", (res, req) => {
     // res.send();
   })
-  .listen(PORT, (listenSocket) => {
+  .listen(process.env.PORT || 9001, (listenSocket) => {
     if (listenSocket) {
       console.log("Listening to:" + PORT);
       console.log("Please ocnnect somehow");
