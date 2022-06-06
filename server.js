@@ -2,7 +2,7 @@ const UWS = require("uWebSockets.js");
 const randomColor = require("randomcolor");
 var express = require("express");
 const { v4: uuidv4 } = require("uuid");
-const PORT = process.env.PORT || process.env.port || "0.0.0.0";
+const PORT = process.env.PORT || process.env.port || 9001;
 const decoder = new TextDecoder();
 
 const SOCKETS = [];
@@ -118,7 +118,7 @@ const app = UWS.App({
       .end("Hello there!");
   })
   .get("/home", (res, req) => {
-    res.send("Welcome Home");
+    // res.send();
   })
   .listen(PORT, (listenSocket) => {
     if (listenSocket) {
