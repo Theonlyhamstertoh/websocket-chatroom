@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatroom</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="chat">
+        <div id="start_screen" class="textbox center">
+          <input type="text" autofocus id="user_input" placeholder="Name" />
+          <button id="enter">Enter</button>
+        </div>
+        <!-- <div class="message_box">
+          <span>
+            <span class="username">Weibo</span>
+            <span class="time">11:00pm</span>
+          </span>
+          <span class="message">It's Me Babay!</span>
+        </div> -->
+        <!-- <div class="connection_message">client connected</div> -->
+        <div id="message_bar" class="textbox">
+          <input
+            type="text"
+            autofocus
+            id="user_message"
+            placeholder="Type something..."
+          />
+          <button id="add_message">Enter</button>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./src/js/main.js"></script>
+  </body>
+</html>

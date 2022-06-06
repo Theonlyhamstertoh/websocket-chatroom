@@ -1,0 +1,114 @@
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  height: auto;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  background-color: #222;
+}
+
+.chat {
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  display: flex;
+  margin-bottom: 200px;
+  flex-direction: column;
+}
+
+#message_bar {
+  display: none;
+  position: fixed;
+  bottom: 0%; /* position the top  edge of the element at the middle of the parent */
+  left: 50%; /* position the left edge of the element at the middle of the parent */
+  transform: translate(-50%, -50%);
+  width: 250px;
+
+  @media (max-width: 400px) {
+    // filter: scale(0.6);
+  }
+}
+.textbox {
+  display: flex;
+  gap: 5px;
+}
+
+.center {
+  position: absolute;
+  top: 50%; /* position the top  edge of the element at the middle of the parent */
+  left: 50%; /* position the left edge of the element at the middle of the parent */
+  transform: translate(-50%, -50%);
+}
+
+.connection_message {
+  color: rgb(93, 222, 78);
+  font-family: monospace;
+  margin: 5px 3px;
+}
+
+.disconnected_message {
+  color: rgb(222, 78, 78);
+  font-family: monospace;
+  margin: 10px 3px;
+}
+input[type="text"] {
+  background-color: rgba(145, 158, 226, 0.312);
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 8px 10px;
+  transition: all 100ms linear 0s;
+
+  &::placeholder {
+    color: rgba(220, 220, 220, 0.531);
+  }
+}
+
+button {
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.887);
+  background-color: rgba(73, 98, 238, 0.738);
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: all 100ms linear 0s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+.message_box {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(57, 56, 56, 0.441);
+  color: rgba(204, 204, 204, 0.712);
+
+  width: fit-content;
+  border-radius: 7px;
+  padding: 6px 20px;
+  padding-bottom: 12px;
+  transition: all 500ms linear 0s;
+  margin: 5px 0;
+  max-width: 290px;
+  word-wrap: break-word;
+  .username {
+    font-weight: 800;
+    font-size: 18px;
+    color: rgb(78, 121, 222);
+  }
+
+  .time {
+    font-size: 12px;
+    font-family: monospace;
+    padding-left: 5px;
+  }
+
+  .message {
+  }
+}
+canvas {
+  width: 100%;
+}
