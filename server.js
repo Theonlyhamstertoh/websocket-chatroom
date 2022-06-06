@@ -112,10 +112,13 @@ const app = UWS.App({
     },
   })
   .get("/*", (res, req) => {
-    res.end("Nothing to see here");
+    res
+      .writeStatus("200 OK")
+      .writeHeader("IsExample", "Yes")
+      .end("Hello there!");
   })
   .get("/home", (res, req) => {
-    res.end("Welcome Home");
+    res.send("Welcome Home");
   })
   .listen(PORT, (listenSocket) => {
     if (listenSocket) {
