@@ -19,8 +19,8 @@ class uWebSocket {
       console.log("WS DISCONNECTED");
     };
     this.ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      messageTypeHandler(message);
+      const serverData = JSON.parse(event.data);
+      messageTypeHandler(serverData);
     };
   }
 }
@@ -51,10 +51,8 @@ ELEMENTS.room_container.addEventListener("click", (e) => {
     SOCKET.ws.send(
       JSON.stringify({
         type: TYPES.SELF_CONNECTED,
-        body: {
-          username: user_input.value,
-          room: null,
-        },
+        username: user_input.value,
+        room: null,
       })
     );
     SOCKET.ws.send(
@@ -74,10 +72,8 @@ ELEMENTS.room_container.addEventListener("click", (e) => {
     SOCKET.ws.send(
       JSON.stringify({
         type: TYPES.SELF_CONNECTED,
-        body: {
-          username: user_input.value,
-          room: room_input.value,
-        },
+        username: user_input.value,
+        room: room_input.value,
       })
     );
     SOCKET.ws.send(

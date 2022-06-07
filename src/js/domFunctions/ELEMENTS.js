@@ -11,5 +11,7 @@ const ELEMENTS = {
   room_box: document.getElementById("room_box"),
   user_input: document.getElementById("user_input"),
   room_input: document.getElementById("room_input"),
+  room_code: document.getElementById("room_code"),
+  callout: document.querySelector(".callout"),
 };
 export default ELEMENTS;

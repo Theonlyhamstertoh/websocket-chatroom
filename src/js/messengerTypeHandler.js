@@ -1,32 +1,51 @@
 import addTextHTML from "./addTextHtml";
 import addConnectionMessage from "./domFunctions/addConnectionMessage";
+import ELEMENTS from "./domFunctions/ELEMENTS";
 export const OPEN_ROOMS = [];
 
-export default function messageTypeHandler(message) {
-  switch (message.type) {
+export default function messageTypeHandler(serverData) {
+  console.log(true, serverData, OPEN_ROOMS);
+
+  switch (serverData.type) {
     case TYPES.CLIENT_MESSAGE:
-      addTextHTML(message.body);
+      addTextHTML(serverData);
       user_message.value = "";
       break;
     case TYPES.CLIENT_CONNECTED:
-      addConnectionMessage("on", message.body.username);
+      addConnectionMessage("on", serverData.username);
+      if (serverData.code) {
+        console.log("yes");
+        ELEMENTS.room_code.textContent = serverData.code;
+        ELEMENTS.callout.classList.remove("hidden");
+      }
       break;
     case TYPES.CLIENT_DISCONNECTED:
-      addConnectionMessage("off", message.body.username);
+      addConnectionMessage("off", serverData.username);
+      console.log("CLIENT DISCONNECTED?");
       break;
     case TYPES.FETCH_ALL_MESSAGES:
-      console.log("NOT WORKING?", message.body);
-      message.body.forEach((message) => messageTypeHandler(message));
+      serverData.messages.forEach((message) => messageTypeHandler(message));
       break;
     case TYPES.FETCH_ALL_ROOMS:
-      OPEN_ROOMS.push(...message.body.rooms);
+      OPEN_ROOMS.push(...serverData.rooms);
+      break;
+    case TYPES.ROOM_CLOSED:
+      OPEN_ROOMS.find((room, index) => {
+        //find specific room first
+        if (room.id === serverData.room.id) {
+          // if room is empty, remove room
+          OPEN_ROOMS.splice(index, 1);
+        }
+      });
       console.log(OPEN_ROOMS);
       break;
     case TYPES.SERVER_MESSAGE:
-      console.log(message.body);
+      console.log(serverData);
       break;
     case TYPES.ROOM_CREATED:
-      console.log(message.body);
+      console.log(serverData);
+      ELEMENTS.room_code.textContent = serverData.room.code;
+      ELEMENTS.callout.classList.remove("hidden");
       break;
   }
 }
