@@ -11,10 +11,10 @@ export default function messageTypeHandler(serverData) {
       break;
     case TYPES.CLIENT_CONNECTED:
       addConnectionMessage("on", serverData.username);
-      if (serverData.code) {
-        ELEMENTS.room_code.textContent = serverData.code;
-        ELEMENTS.callout.classList.remove("hidden");
-      }
+      // if (serverData.code) {
+      ELEMENTS.room_code.textContent = serverData.code;
+      ELEMENTS.callout.classList.remove("hidden");
+      // }
       break;
     case TYPES.CLIENT_DISCONNECTED:
       addConnectionMessage("off", serverData.username);
@@ -39,9 +39,12 @@ export default function messageTypeHandler(serverData) {
       console.log(serverData);
       break;
     case TYPES.ROOM_CREATED:
-      console.log(serverData);
-      ELEMENTS.room_code.textContent = serverData.room.code;
-      ELEMENTS.callout.classList.remove("hidden");
+      // console.log(serverData);
+      OPEN_ROOMS.push({
+        code: serverData.code,
+        id: serverData.id,
+      });
+      console.log(OPEN_ROOMS);
       break;
   }
 }

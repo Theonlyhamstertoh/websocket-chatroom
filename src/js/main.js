@@ -1,6 +1,7 @@
 import "../scss/style.scss";
 import ELEMENTS from "./domFunctions/ELEMENTS";
 import messageTypeHandler, { OPEN_ROOMS, TYPES } from "./messengerTypeHandler";
+import cryptoRandomString from "crypto-random-string";
 class uWebSocket {
   constructor() {
     this.ws = "";
@@ -52,7 +53,7 @@ ELEMENTS.room_container.addEventListener("click", (e) => {
       JSON.stringify({
         type: TYPES.SELF_CONNECTED,
         username: user_input.value,
-        room: null,
+        room: cryptoRandomString({ length: 4, type: "distinguishable" }),
       })
     );
     SOCKET.ws.send(

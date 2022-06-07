@@ -13,6 +13,7 @@
     "vite": "^2.9.9"
   },
   "dependencies": {
+    "crypto-random-string": "^5.0.0",
     "date-fns": "^2.28.0",
     "sass": "^1.52.2"
   }
