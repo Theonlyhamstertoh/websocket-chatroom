@@ -96,7 +96,6 @@ const CLIENT = (() => {
     ws.subscribe(specificRoomTopic(newRoom, TYPES.CLIENT_MESSAGE));
 
     ws.publish(TYPES.SERVER_MESSAGE, JSON.stringify(room));
-    ws.send(JSON.stringify({ type: TYPES.ROOM_CREATED, room }));
 
     // since first one in, send connect data to display for self
     ws.send(JSON.stringify(clientData));
