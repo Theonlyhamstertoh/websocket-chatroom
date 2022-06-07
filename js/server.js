@@ -11,7 +11,7 @@ const app = UWS.App({
   // passphrase: "1234",
 })
   .ws("/*", {
-    // idleTimeout: 12,
+    idleTimeout: 12,
     maxBackpressure: 1024,
     maxPayloadLength: 512,
     compression: UWS.DEDICATED_COMPRESSOR_3KB,
