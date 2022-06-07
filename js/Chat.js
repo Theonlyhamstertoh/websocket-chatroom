@@ -76,7 +76,7 @@ const CLIENT = (() => {
     ws.room = newRoom.code;
     // send specific info back
 
-    const roomData = {
+    const room = {
       code: newRoom.code,
       id: newRoom.id,
     };
@@ -97,8 +97,8 @@ const CLIENT = (() => {
     ws.subscribe(specificRoomTopic(newRoom, TYPES.CLIENT_MESSAGE));
     ws.subscribe(TYPES.SERVER_MESSAGE);
 
-    ws.publish(TYPES.SERVER_MESSAGE, JSON.stringify(roomData));
-    ws.send(JSON.stringify({ type: TYPES.ROOM_CREATED, roomData }));
+    ws.publish(TYPES.SERVER_MESSAGE, JSON.stringify(room));
+    ws.send(JSON.stringify({ type: TYPES.ROOM_CREATED, room }));
 
     // since first one in, send connect data to display for self
     ws.send(JSON.stringify(clientData));
@@ -126,6 +126,7 @@ const CLIENT = (() => {
     const clientData = {
       type: TYPES.CLIENT_CONNECTED,
       username: ws.username,
+      code: ws.room,
     };
 
     ws.publish(
