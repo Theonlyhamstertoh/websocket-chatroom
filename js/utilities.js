@@ -1,4 +1,4 @@
-const { ROOMS } = require("./variables");
+const { ROOMS, TYPES } = require("./variables");
 
 function createMessage(ws, type, props) {
   return {
@@ -13,35 +13,41 @@ function createMessage(ws, type, props) {
 function removeClientFromRoom(ws) {
   return ROOMS.find((room) => {
     //find specific room first
-    if (room.code === ws.roomCode) {
+    if (room.code === ws.room) {
       // find specific client within room
       room.clients.find((client, index) => {
         // remove client from array
         if (client.id === ws.id) room.clients.splice(index, 1);
       });
-
-      // if room is empty, remove room
-      if (room.clients.length === 0) {
-        room.clients.splice(index, 1);
-      }
     }
   });
 }
 
-function removeRoomIfEmpty() {
-  ROOMS.find((room) => {
+function removeRoomIfEmpty(ws, app) {
+  ROOMS.find((room, index) => {
     //find specific room first
-    if (room.code === ws.roomCode) {
+    if (room.code === ws.room) {
       // if room is empty, remove room
+      console.log("splice process: ", room);
       if (room.clients.length === 0) {
-        room.clients.splice(index, 1);
+        ROOMS.splice(index, 1);
+        app.publish(
+          TYPES.SERVER_MESSAGE,
+          JSON.stringify({
+            type: TYPES.ROOM_CLOSED,
+            room: {
+              code: room.code,
+              id: room.id,
+            },
+          })
+        );
       }
     }
   });
 }
 
 function findRoom(ws) {
-  return ROOMS.find((room) => room.code === ws.roomCode);
+  return ROOMS.find((room) => room.code === ws.room);
 }
 
 const specificRoomTopic = (room, type) => `${room.id}+${type}`;

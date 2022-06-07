@@ -1,5 +1,6 @@
 const UWS = require("uWebSockets.js");
 const CLIENT = require("./Chat");
+const { specificRoomTopic } = require("./utilities");
 const { TYPES, ROOMS } = require("./variables");
 const PORT = process.env.PORT || process.env.port || 9001;
 const decoder = new TextDecoder();
@@ -37,7 +38,10 @@ const app = UWS.App({
     open: (ws) => {
       console.log("WebSocket connection made");
       ws.send(
-        JSON.stringify({ type: TYPES.FETCH_ALL_ROOMS, body: { rooms: ROOMS } })
+        JSON.stringify({
+          type: TYPES.FETCH_ALL_ROOMS,
+          rooms: ROOMS.map((room) => ({ code: room.code, id: room.id })),
+        })
       );
     },
     message: (ws, message, isBinary) => {

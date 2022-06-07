@@ -2,7 +2,6 @@ const generator = require("generate-password");
 const { v4: uuidv4 } = require("uuid");
 const { TYPES, ROOMS } = require("./variables");
 const {
-  createMessage,
   removeClientFromRoom,
   removeRoomIfEmpty,
   specificRoomTopic,
@@ -16,18 +15,19 @@ const {
  */
 
 const CLIENT = (() => {
-  function send_message(ws, clientMessage, app) {
+  function send_message(ws, clientMessage) {
     // create json
-    const clientData = createMessage(ws, TYPES.CLIENT_MESSAGE, {
+    const clientData = {
+      type: TYPES.CLIENT_MESSAGE,
+      username: ws.username,
       text: clientMessage.body,
-    });
+    };
 
     // find specific room
     const room = findRoom(ws);
     // save into array
     room.messages.push(clientData);
 
-    console.log(clientData);
     // sent off to everyone
     ws.publish(
       specificRoomTopic(room, TYPES.CLIENT_MESSAGE),
@@ -35,27 +35,33 @@ const CLIENT = (() => {
     );
     ws.send(JSON.stringify(clientData));
   }
+
   function self_connect(ws, clientMessage, app) {
     // create user data on the websocket object
     // join/create are separate from this to keep code clean. Clientside will just make another socket request to specific type.
-    ws.username = clientMessage.body.username;
+    ws.username = clientMessage.username;
     ws.id = uuidv4();
-    ws.roomCode = clientMessage.body.room;
+    ws.room = clientMessage.room;
   }
 
   function self_disconnect(ws, app) {
-    console.log("DISCONNECTED");
-
     const room = findRoom(ws);
-    if (room !== undefined) {
-      const clientData = createMessage(ws, TYPES.CLIENT_DISCONNECTED);
-      app.publish(
-        specificRoomTopic(room.id, TYPES.CLIENT_DISCONNECTED),
-        JSON.stringify(clientData)
-      );
-      removeClientFromRoom(ws);
-      removeRoomIfEmpty(ws);
-    }
+    // leave if user had not joined a room
+    if (room === undefined) return;
+    const clientData = {
+      type: TYPES.CLIENT_DISCONNECTED,
+      username: ws.username,
+    };
+
+    app.publish(
+      specificRoomTopic(room, TYPES.CLIENT_DISCONNECTED),
+      JSON.stringify(clientData)
+    );
+    removeClientFromRoom(ws);
+    removeRoomIfEmpty(ws, app);
+    console.log(
+      ROOMS.map((room) => ({ clients: room.clients, code: room.code }))
+    );
   }
 
   function create_room(ws, app) {
@@ -71,11 +77,18 @@ const CLIENT = (() => {
     // send specific info back
 
     const roomData = {
-      room: {
-        code: newRoom.code,
-        clients: newRoom.clients,
-      },
+      code: newRoom.code,
+      id: newRoom.id,
     };
+
+    // send the small client data over
+    const clientData = {
+      type: TYPES.CLIENT_CONNECTED,
+      username: ws.username,
+    };
+    newRoom.messages.push(clientData);
+    newRoom.clients.push(ws);
+    ROOMS.push(newRoom);
 
     // subscribe to the SPECIFIC ROOM to receive messages from others
     // the subscribed topic has to be unique so that messages are filtered by room
@@ -85,14 +98,10 @@ const CLIENT = (() => {
     ws.subscribe(TYPES.SERVER_MESSAGE);
 
     ws.publish(TYPES.SERVER_MESSAGE, JSON.stringify(roomData));
-    ROOMS.push(newRoom);
-    ws.send(JSON.stringify({ type: TYPES.ROOM_CREATED, body: roomData }));
+    ws.send(JSON.stringify({ type: TYPES.ROOM_CREATED, roomData }));
 
-    // send the small client data over
-    const clientData = createMessage(ws, TYPES.CLIENT_CONNECTED);
-    // since first one, no need to publish. push clientData
+    // since first one in, send connect data to display for self
     ws.send(JSON.stringify(clientData));
-    newRoom.messages.push(clientData);
   }
 
   function join_room(ws, app) {
@@ -102,7 +111,7 @@ const CLIENT = (() => {
     room.clients.push(ws);
     // retrieve and show all message from the ROOM
     ws.send(
-      JSON.stringify({ type: TYPES.SHOW_ALL_MESSAGES, body: room.messages })
+      JSON.stringify({ type: TYPES.SHOW_ALL_MESSAGES, messages: room.messages })
     );
 
     // subscribe to the SPECIFIC ROOM to receive messages from others
@@ -114,7 +123,11 @@ const CLIENT = (() => {
 
     // notify everyone in the room that the client has joined
     // send to all clients in room including CLIENT ITSELF
-    const clientData = createMessage(ws, TYPES.CLIENT_CONNECTED);
+    const clientData = {
+      type: TYPES.CLIENT_CONNECTED,
+      username: ws.username,
+    };
+
     ws.publish(
       specificRoomTopic(room, TYPES.CLIENT_CONNECTED),
       JSON.stringify(clientData)
