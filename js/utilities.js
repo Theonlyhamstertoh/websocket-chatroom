@@ -28,7 +28,6 @@ function removeRoomIfEmpty(ws, app) {
     //find specific room first
     if (room.code === ws.room) {
       // if room is empty, remove room
-      console.log("splice process: ", room);
       if (room.clients.length === 0) {
         ROOMS.splice(index, 1);
         app.publish(
