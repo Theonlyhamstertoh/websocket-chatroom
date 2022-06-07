@@ -37,6 +37,7 @@ const app = UWS.App({
     },
     open: (ws) => {
       console.log("WebSocket connection made");
+      ws.subscribe(TYPES.SERVER_MESSAGE);
       ws.send(
         JSON.stringify({
           type: TYPES.FETCH_ALL_ROOMS,

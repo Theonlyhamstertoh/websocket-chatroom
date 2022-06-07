@@ -67,16 +67,14 @@ const CLIENT = (() => {
   function create_room(ws, app) {
     const newRoom = {
       id: uuidv4(),
-      code: generator.generate({ length: 4, uppercase: false }),
+      code: ws.room,
       clients: [],
       messages: [],
     };
 
-    // save the room code of client's current room
-    ws.room = newRoom.code;
     // send specific info back
-
     const room = {
+      type: TYPES.ROOM_CREATED,
       code: newRoom.code,
       id: newRoom.id,
     };
@@ -85,6 +83,7 @@ const CLIENT = (() => {
     const clientData = {
       type: TYPES.CLIENT_CONNECTED,
       username: ws.username,
+      code: newRoom.code,
     };
     newRoom.messages.push(clientData);
     newRoom.clients.push(ws);
@@ -95,7 +94,6 @@ const CLIENT = (() => {
     ws.subscribe(specificRoomTopic(newRoom, TYPES.CLIENT_CONNECTED));
     ws.subscribe(specificRoomTopic(newRoom, TYPES.CLIENT_DISCONNECTED));
     ws.subscribe(specificRoomTopic(newRoom, TYPES.CLIENT_MESSAGE));
-    ws.subscribe(TYPES.SERVER_MESSAGE);
 
     ws.publish(TYPES.SERVER_MESSAGE, JSON.stringify(room));
     ws.send(JSON.stringify({ type: TYPES.ROOM_CREATED, room }));
@@ -119,7 +117,6 @@ const CLIENT = (() => {
     ws.subscribe(specificRoomTopic(room, TYPES.CLIENT_CONNECTED));
     ws.subscribe(specificRoomTopic(room, TYPES.CLIENT_DISCONNECTED));
     ws.subscribe(specificRoomTopic(room, TYPES.CLIENT_MESSAGE));
-    ws.subscribe(TYPES.SERVER_MESSAGE);
 
     // notify everyone in the room that the client has joined
     // send to all clients in room including CLIENT ITSELF
