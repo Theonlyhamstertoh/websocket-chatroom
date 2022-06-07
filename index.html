@@ -9,10 +9,23 @@
   <body>
     <div id="app">
       <div class="chat">
-        <div id="start_screen" class="textbox center">
+        <div class="room_container center">
+          <input type="text" autofocus id="user_input" placeholder="Name" />
+
+          <div class="button_container">
+            <button id="create_room">Create Room</button>
+            <button id="join_room">Join Room</button>
+          </div>
+          <div id="room_box" class="textbox hidden">
+            <input type="text" id="room_input" placeholder="code" />
+            <button id="enter">Enter</button>
+          </div>
+        </div>
+        <!-- <div id="start_screen" class="textbox center">
           <input type="text" autofocus id="user_input" placeholder="Name" />
           <button id="enter">Enter</button>
-        </div>
+        </div> -->
+
         <!-- <div class="message_box">
           <span>
             <span class="username">Weibo</span>
