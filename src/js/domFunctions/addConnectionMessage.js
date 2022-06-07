@@ -1,3 +1,5 @@
+import ELEMENTS from "./ELEMENTS";
+
 export default function addConnectionMessage(connection_type, username) {
   const div = document.createElement("div");
 
@@ -9,5 +11,5 @@ export default function addConnectionMessage(connection_type, username) {
     div.classList.add("disconnected_message");
   }
 
-  chat_container.appendChild(div);
+  ELEMENTS.chat_container.appendChild(div);
 }

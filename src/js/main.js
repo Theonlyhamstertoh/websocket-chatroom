@@ -1,10 +1,6 @@
-import { TYPES } from "../../../server/js/variables";
 import "../scss/style.scss";
-import addTextHTML from "./addTextHtml";
 import ELEMENTS from "./domFunctions/ELEMENTS";
-
-const OPEN_ROOMS = [];
-
+import messageTypeHandler, { OPEN_ROOMS, TYPES } from "./messengerTypeHandler";
 class uWebSocket {
   constructor() {
     this.ws = "";
@@ -23,7 +19,6 @@ class uWebSocket {
       console.log("WS DISCONNECTED");
     };
     this.ws.onmessage = (event) => {
-      console.log(event);
       const message = JSON.parse(event.data);
       messageTypeHandler(message);
     };
@@ -73,7 +68,7 @@ ELEMENTS.room_container.addEventListener("click", (e) => {
     ELEMENTS.join_room.classList.add("active");
     ELEMENTS.room_box.classList.remove("hidden");
   } else if (e.target.id === "enter") {
-    const theRoom = ROOMS.find((room) => (room.code = room_input.value));
+    const theRoom = OPEN_ROOMS.find((room) => (room.code = room_input.value));
     if (theRoom === undefined) return alert("no room found");
     initialize(user_input);
     SOCKET.ws.send(
@@ -85,6 +80,11 @@ ELEMENTS.room_container.addEventListener("click", (e) => {
         },
       })
     );
+    SOCKET.ws.send(
+      JSON.stringify({
+        type: TYPES.JOIN_ROOM,
+      })
+    );
   }
 });
 
@@ -93,9 +93,9 @@ function initialize() {
   ELEMENTS.room_container.style.display = "none";
   ELEMENTS.user_message.focus();
 
-  add_button.addEventListener("click", sendMessage);
-  window.addEventListener("keydown", sendMessage);
-  room_container.removeEventListener("click", initialize);
+  ELEMENTS.add_button.addEventListener("click", sendMessageToServer);
+  window.addEventListener("keydown", sendMessageToServer);
+  ELEMENTS.room_container.removeEventListener("click", initialize);
 }
 
 function sendMessageToServer(e) {

@@ -6,9 +6,10 @@ export default function addTextHTML(body) {
   const message_box = document.createElement("div");
   message_box.classList.add("message_box");
 
+  console.log(body);
   const htmlFRAG = `
        <span>
-               <span class="username" style="color:${body.color};">${body.username}</span>
+               <span class="username">${body.username}</span>
                <span class="time">${timestamp}</span>
              </span>
              <span class="message">${body.text}</span>   
