@@ -4,8 +4,6 @@ import ELEMENTS from "./domFunctions/ELEMENTS";
 export const OPEN_ROOMS = [];
 
 export default function messageTypeHandler(serverData) {
-  console.log(true, serverData, OPEN_ROOMS);
-
   switch (serverData.type) {
     case TYPES.CLIENT_MESSAGE:
       addTextHTML(serverData);
@@ -14,14 +12,12 @@ export default function messageTypeHandler(serverData) {
     case TYPES.CLIENT_CONNECTED:
       addConnectionMessage("on", serverData.username);
       if (serverData.code) {
-        console.log("yes");
         ELEMENTS.room_code.textContent = serverData.code;
         ELEMENTS.callout.classList.remove("hidden");
       }
       break;
     case TYPES.CLIENT_DISCONNECTED:
       addConnectionMessage("off", serverData.username);
-      console.log("CLIENT DISCONNECTED?");
       break;
     case TYPES.FETCH_ALL_MESSAGES:
       serverData.messages.forEach((message) => messageTypeHandler(message));
