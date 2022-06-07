@@ -4,8 +4,8 @@ import messageTypeHandler, { OPEN_ROOMS, TYPES } from "./messengerTypeHandler";
 class uWebSocket {
   constructor() {
     this.ws = "";
-    // this.serverUrl = "wss://weibo-websockets.herokuapp.com/";
-    this.serverUrl = "ws://localhost:9001";
+    this.serverUrl = "wss://weibo-websockets.herokuapp.com/";
+    // this.serverUrl = "ws://localhost:9001";
   }
 
   connect() {
