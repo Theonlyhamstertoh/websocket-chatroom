@@ -11,13 +11,16 @@ function createMessage(ws, type, props) {
 }
 
 function removeClientFromRoom(ws) {
-  return ROOMS.find((room) => {
+  ROOMS.find((room) => {
     //find specific room first
     if (room.code === ws.room) {
       // find specific client within room
       room.clients.find((client, index) => {
         // remove client from array
-        if (client.id === ws.id) room.clients.splice(index, 1);
+        if (client.id === ws.id) {
+          // REMEMBER TO RETURN
+          return room.clients.splice(index, 1);
+        }
       });
     }
   });
@@ -25,6 +28,7 @@ function removeClientFromRoom(ws) {
 
 function removeRoomIfEmpty(ws, app) {
   ROOMS.find((room, index) => {
+    console.log(room);
     //find specific room first
     if (room.code === ws.room) {
       // if room is empty, remove room
@@ -40,6 +44,7 @@ function removeRoomIfEmpty(ws, app) {
             },
           })
         );
+        return;
       }
     }
   });

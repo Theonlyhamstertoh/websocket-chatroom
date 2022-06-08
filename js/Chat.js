@@ -57,11 +57,11 @@ const CLIENT = (() => {
       specificRoomTopic(room, TYPES.CLIENT_DISCONNECTED),
       JSON.stringify(clientData)
     );
+    console.log("++++++++++++++++++++++++++");
+    console.log(ROOMS);
+    console.log("--------------------------");
     removeClientFromRoom(ws);
     removeRoomIfEmpty(ws, app);
-    console.log(
-      ROOMS.map((room) => ({ clients: room.clients, code: room.code }))
-    );
   }
 
   function create_room(ws, app) {

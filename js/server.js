@@ -62,6 +62,7 @@ const app = UWS.App({
           CLIENT.join_room(ws);
           break;
       }
+      // console.log(ROOMS);
     },
     close: (ws, code, message) => {
       console.log("DISCONNECTED");
